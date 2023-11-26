@@ -1,0 +1,237 @@
+Q1
+ set client1 Alice
+
+Q2
+get client1
+
+Q3
+ set client1 Clie 
+Output-- Ok
+
+Q4
+Output-- nil
+
+Q5
+del client1
+
+Q6
+Output-- integer 0
+
+Q7
+set client:1:name Alice	
+
+Q8
+set client:1:level 1
+
+Q9
+incr client:1:level
+
+Q10
+decr client:1:level
+
+Q11
+exists client:1:name 
+
+Q12
+exists client:1:address 
+
+Q13
+set client:1:message "Hello World"
+
+Q14
+expire message 50
+ttl message (time to leave)
+
+Q15 key exists without any expiration time
+ttl client:1:name  Output-- (-1)
+
+Q16
+ttl client:1:name -- (-1)
+key exists without any expiration time
+
+Q17
+ttl client:2:name
+Output-- -2 
+
+Q18
+setex client:1:message 10 "Hello World"    Set the expiration time while creating the key .
+
+Q19 (stop the expiration)
+persist message 
+
+Q20
+Output-- 0
+
+Q21
+Output-- 0
+
+Q22
+mset server:1:name Apache server:1:port 8000
+
+Q23
+append server:1:name "lite" --returns total length of string
+
+Q24
+RENAME  server:1:name server:1:identifier
+
+Q25
+flushall
+
+Q26
+rpush customers alice bob charles
+
+Q27
+lpush customers alice bob charles
+
+Q28
+returns the number of elements in list
+
+Q29 (if the length of list is not known use -1)
+lrange customers 0 6
+ lrange customers 0 -1   
+
+Q30
+Linsert customer after "bob" "Harry"
+
+Q31
+Linsert customer BEFORE "bob" "Harrison"
+
+Q32
+llen customers
+
+Q33
+rpop customers
+
+Q34
+lpop customers
+
+Q35
+flushall
+
+Q36
+Sadd courses Maths CS Physics
+
+Q37
+sadd Economics
+
+Q38
+smembers courses
+
+Q39
+Output-- 0 cannot add
+
+Q40
+scard  courses(set cardinality)
+
+Q41
+sismember courses Maths  --1 present
+
+Q42
+Output-- 0
+
+Q43
+smove courses customers Maths  move from courses to customer
+
+Q44
+SREM customers "Maths"
+
+Q45
+No it does not work
+
+Q46
+flushall
+
+Q47
+ zadd clients 3500 Harry 3300 Harry 3500 Charles 3400 Robert
+
+Q48
+zrange clients 0 -1
+
+Q49 
+zadd clients Charles 3400
+
+Q50
+zrank clients Robert
+
+Q51
+zrank clients Dumbeldore  -- nil
+
+Q52
+ zincrby clients 1000 Robert
+
+Q53
+zrange clients 0 -1
+
+Q54
+flushall
+
+Q55
+Hset customer:1 name Alice income 3200
+
+Q56
+hget customer:1 name
+
+Q57
+hgetall customer:1
+
+Q58
+ERR unknown command 'hgetkeys', with args beginning with: 'customer:2'
+
+Q59
+hkeys customer:1
+
+Q60
+hvals customer:1
+
+Q61
+hkeys customer:2
+
+Q62
+hvals customer:1
+
+Q63
+hlen customer:1
+ 
+Q64
+Hincrby customer:1 income 1000
+
+Q65
+HDEL customer:1 name
+
+Q67
+SAVE
+ 
+Q68
+QUIT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

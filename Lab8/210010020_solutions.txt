@@ -1,0 +1,75 @@
+Create and list database
+1.use companydb
+2. db.customer.insertOne({'name':'Alice','age':24})
+3 (⋆). show dbs
+   it does not show CompanyDB since it is empty.
+   use companydb
+
+*******************************************************************************************
+Insert
+1. use companydb
+2. db.customer.insertOne({'name':'Alice','age':24})
+3 (⋆). show dbs
+   it shows CompanyDB
+show dbs
+companydb    8.00 KiB
+admin      348.00 KiB
+local       18.87 GiB
+   
+4.  show collections
+5.db.customer.insertMany([{'name':'Bob'} ,{'name':'Charles','Age':26,'level':1},{'name':'Darshan','Age':27}])
+
+Find
+1. db.customer.find()
+2. companydb> db.customer.find({'age':27})
+3. companydb> db.customer.find({'age':{$gte:25} })
+4(⋆) db.customers.find({"age": {$lt:27}})
+5(⋆) db.customers.find({"age": {$lte:27}})
+6. db.customer.find({'age':{$lte:27}} ,{'name':1})
+7. db.customer.find({'age':{$lte:27}} ,{'name':1,'age':1})
+*******************************************************************************************
+Nested documents
+1. db.customer.insertOne({'name':'Harry','age':25,'address':{'street':'Paud Road','city':'Pune','state':'Maharastra','pin':411038}})
+
+2. db.customer.find({'address.city':'Dharwad'})
+*******************************************************************************************
+Update
+1. db.customer.update({'name':'Alice'},{$set:{'age':29}})
+2 (⋆). db.customers.update({"name":"Alice"})
+   prints MongoshInvalidInputError: [COMMON-10001] Missing required argument at position 1 (Collection.update)
+*******************************************************************************************
+
+Delete
+1.db.customer.deleteOne({'name':'Bob'})
+2 (⋆). db.customers.find()
+3. db.customer.drop()
+4. If all collections and data records are deleted then entire database is alos deleted
+
+*******************************************************************************************
+
+Exercise (MongoDB)
+
+1. show dbs
+2. show collections
+3. db.listingsAndReviews.find({"address.country":"Australia"}, {"_id":1,"name":1})
+4. db.listingsAndReviews.find({"bedrooms":{$gte:2}}, {"_id":1,"name":1})
+5. db.listingsAndReviews.find({"address.location.is_location_exact":true}, {"_id":1,"name":1,"address":1})
+
+
+Exercise (Redis)
+
+1.  set course:1:title "Data Management"
+    set course:1:NumberOfStudents 3
+    sadd course:1:textbooks "Fundamentals of Database Systems" "No SQL for Mere Mortals"  
+2.  zadd course:1:students 9.1 Alice 8.9 Bob 9.0 Charles
+3.  zrange course:1:students 0 -1
+4.  scard course:1:textbooks
+5.  rename course:1:textbooks course:1:materials
+6.  sadd course:1:materials slides
+7.  sadd course:1:assignment4 Redis MongoDB
+8.  expire course:1:handout10 100
+9.  keys *
+10. del course:1:NumberOfStudents
+
+
+

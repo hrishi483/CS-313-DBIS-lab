@@ -1,0 +1,57 @@
+Q1
+match (p:Person)-[r:REVIEWED]-> (m:Movie) 
+With m,r.rating as rates
+match (director:Person)-[d:DIRECTED]->(m)
+return m.title,collect(director.name),rates
+
+Q2
+MATCH (p:Person)
+OPTIONAL MATCH (p)-[:DIRECTED]->(movie:Movie)
+RETURN p.name AS PersonName, COLLECT(DISTINCT movie)
+
+Q3 Remove the name of Tom Hanks
+Match (p:Person{name:"Tom Hanks"})-[a:ACTED_IN]->(m:Movie)
+Match (p2:Person)-[a2:ACTED_IN]->(m)
+Where p.name<>p2.name
+Return m.title,collect(p2.name)
+
+Q4
+Match (p:Person{name:"Tom Hanks"})-[a:ACTED_IN]->(m:Movie)
+Match (p2:Person)-[a2:ACTED_IN]->(m)
+Where p.name<>p2.name
+Return p2.name,collect(m.title)
+
+Q5
+Match (p:Person)-[a:ACTED_IN]->(m:Movie)
+Match (p2:Person)-[a2:ACTED_IN]->(m)
+Where p.name<>p2.name
+Return p2.name,p.name,collect(m.title)
+
+Q6 Check the condition that id of person1 < id person2
+Match (p:Person)-[a:ACTED_IN]->(m:Movie)
+Match (p2:Person)-[a2:ACTED_IN]->(m)
+Where p.name<>p2.name and id(p)<id(p2)
+return p2.name,p.name,collect(m.title)
+
+Q7 Use where to check born is not null
+Match (p:Person)
+where p.born is not NULL
+return p.name,2023-p.born
+
+Q8
+Match (p:Person)
+Optional Match (p)-[a:ACTED_IN]->(m:Movie)
+With p,count(m.title) as number_of_movies
+set p.num_movies=number_of_movies
+return p
+
+Q9
+Match(p:Person)
+Optional Match (p)-[r:REVIEWED]->(m:Movie)
+Return p.name,collect(m.title),count(m)
+
+Q10
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+MATCH (m)<-[:DIRECTED]-(d:Person)
+WITH m, COLLECT(DISTINCT p.name) AS actors, COLLECT(DISTINCT d.name) AS directors
+RETURN m.title AS MovieTitle, SIZE(actors) AS Number_of_Actors, SIZE(directors) AS Number_of_Directors

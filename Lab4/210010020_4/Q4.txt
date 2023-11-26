@@ -1,0 +1,147 @@
+n each case, the outcome is presented, including successful database updates, conflicts, and errors. These scenarios illustrate the importance of concurrency control and data integrity in multi-user systems
+Terminal 1:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: bot
+Database update successful
+Terminal 2:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 902
+Enter the role of the actor in movie number 1: bro
+Database update successful
+
+***************************************************
+Case 2: Both Valid Movie IDs, Overlapping
+
+Terminal 1:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: bot
+Database update successful
+Terminal 2:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: cat
+Conflict Detected:
+Error: Duplicate key violates unique constraint "movie_cast_pkey"
+Detail: Key (mov_id, act_id)=(901, 1) already exists.
+***************************************************
+Case 3: One Valid Movie ID, One Invalid Movie ID, Non-Overlapping
+
+Terminal 1:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 911
+Enter the role of the actor in movie number 1: bro
+Database update successful
+Terminal 2:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 1
+Enter the role of the actor in movie number 1: bot
+Error: Movie number 1 is not present in the database. Database is not updated
+***************************************************
+Case 4: Both Invalid Movie IDs, Overlapping
+
+Terminal 1:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 1
+Enter the role of the actor in movie number 1: bot
+Error: Movie number 1 is not present in the database. Database is not updated
+Terminal 2:
+
+Enter the number of movies: 1
+Enter movie ID for movie number 1: 1
+Enter the role of the actor in movie number 1: bot
+Error: Movie number 1 is not present in the database. Database is not updated
+***************************************************
+Case 5: One Invalid Movie ID in Terminal 1, Non-Overlapping
+
+Terminal 1:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: bot
+Enter movie ID for movie number 2: 109
+Error: Movie number 2 is not present in the database. Database is not updated
+Terminal 2:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 902
+Enter the role of the actor in movie number 1: cat
+Enter movie ID for movie number 2: 903
+Enter the role of the actor in movie number 2: dog
+Database update successful
+***************************************************
+Case 6: Both Valid Movie IDs, Non-Overlapping
+
+Terminal 1:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 902
+Enter the role of the actor in movie number 1: cat
+Enter movie ID for movie number 2: 903
+Enter the role of the actor in movie number 2: dog
+Database update successful
+Terminal 2:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: small
+Enter movie ID for movie number 2: 904
+Enter the role of the actor in movie number 2: big
+Database update successful
+***************************************************
+Case 7: Both Valid Movie IDs, Overlapping
+
+Terminal 1:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: bot
+Enter movie ID for movie number 2: 902
+Enter the role of the actor in movie number 2: bro
+Database update successful
+Terminal 2:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: man
+Enter movie ID for movie number 2: 909
+Enter the role of the actor in movie number 2: human
+Conflict Detected:
+Error: Duplicate key violates unique constraint "movie_cast_pkey"
+Detail: Key (mov_id, act_id)=(901, 1) already exists.
+***************************************************
+Case 8: One Invalid Movie ID in Terminal 1, Overlapping
+
+Terminal 1:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: bot
+Enter movie ID for movie number 2: 109
+Enter the role of the actor in movie number 2: tob
+Error: Movie number 2 is not present in the database. Database is not updated
+Terminal 2:
+
+Enter the number of movies: 2
+Enter movie ID for movie number 1: 901
+Enter the role of the actor in movie number 1: man
+Enter movie ID for movie number 2: 902
+Enter the role of the actor in movie number 2: G
+Database update successful
+
+
+Conclusions on Concurrent Transaction Scenarios and Conflicts:
+
+1)Valid Non-Overlapping Access: When transactions access different, non-overlapping data, both can successfully complete without conflicts.
+2)Valid Overlapping Access: If transactions attempt to update the same data concurrently, conflicts may arise, requiring conflict resolution strategies such as locking or timestamps.
+3)One Valid, One Invalid Access: If one transaction references invalid data, it can fail without affecting the other transaction.
+4)Both Invalid Access: When both transactions reference invalid data, both are likely to fail, resulting in no data changes.
+5)Mixed Valid and Invalid Access: Transactions may succeed or fail based on their individual data references, potentially leading to partial updates.

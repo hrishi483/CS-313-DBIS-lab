@@ -1,0 +1,102 @@
+Q1
+Match(movie:Movie) Return movie
+
+Q2
+Match(movie:Movie) Return movie.title, movie.tagline, movie.released
+
+Q3
+Match(person:Person) Return person.born as Birth_Year, person.name as Name
+
+Q4
+MATCH (person:Person)-[acts:ACTED_IN]->(movie:Movie)
+WHERE movie.title = 'The Matrix'
+RETURN person
+
+Q5
+MATCH (person:Person)-[acts:ACTED_IN]->(movie:Movie)
+WHERE movie.title = 'The Matrix'
+RETURN acts,person
+
+
+Q6
+MATCH (movie:Movie)
+WHERE movie.released = 2000
+RETURN movie
+
+
+Q7 ** No matches
+MATCH (person:Person)-[acts:ACTED_IN]->(movie:Movie)
+WHERE person.name Ends with 'Thompson'
+RETURN person.name,movie.title,acts.roles
+
+
+Q8 **Check
+MATCH (person:Person)-[acts:ACTED_IN]->(movie:Movie)
+WHERE movie.title in acts.roles
+RETURN person.name,movie.title,acts.roles
+
+
+Q9 Difficult
+MATCH (tom:Person {name: 'Tom Hanks'})-[:ACTED_IN|DIRECTED]->(movie:Movie)<-[:ACTED_IN|DIRECTED]-(coWorker:Person)
+WHERE coWorker <> tom
+RETURN DISTINCT coWorker
+
+
+Q10
+Match (person:Person)-[reviews:REVIEWED]->(movie:Movie) return movie.title,reviews.summary,reviews.rating
+
+Q11 Aggregating data
+Match(person:Person)-[director:DIRECTED]->(movie:Movie)
+return COLLECT(movie.title)as `movie directed` ,person.name
+
+Q12 Check
+Match(tom:Person {name:"Tom Cruise"})-[acts:ACTED_IN]->(movie:Movie)<-[acts2:ACTED_IN]-(person:Person)
+where person<>"Tom Cruise"
+return movie.title,COLLECT(person.name)
+
+
+Q13 Check
+Match(dir:Person)-[directs:DIRECTED]->(movie:Movie)<-[acts2:ACTED_IN]-(person:Person)
+return dir.name,Collect(movie.title),COUNT(person.name),Collect(person.name)
+
+
+Q14 Difficult
+
+
+Q15
+Match(actor:Person)-[:ACTED_IN]->(movie:Movie)
+where movie.released>=1900 and movie.released<=1999
+return movie.title,movie.released,COLLECT(actor.name)
+
+
+**Q16
+//Select the movies group them them using the realease year.
+//THen use this output to get the actors acting in these movies
+//Group by using releaseYear, actor, the movie_names
+
+MATCH (movie:Movie)
+WITH movie, movie.released AS releaseYear
+MATCH (actor:Person)-[:ACTED_IN]->(movie)
+WITH toString(releaseYear) AS releaseYear, actor, COLLECT(DISTINCT movie) AS moviesActedIn
+RETURN releaseYear, COLLECT(DISTINCT moviesActedIn) AS movies, COLLECT(DISTINCT actor) AS actors
+
+**Q17
+MATCH (movie:Movie)
+WITH movie, movie.released AS releaseYear
+MATCH (actor:Person)-[:ACTED_IN]->(movie)
+WITH toString(releaseYear) AS releaseYear, actor, COLLECT(DISTINCT movie) AS moviesActedIn
+RETURN releaseYear, COLLECT(DISTINCT moviesActedIn) AS movies, COLLECT(DISTINCT actor) AS actors
+ORDER BY releaseYear DESC
+
+
+
+
+**Q18
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WITH p, collect(Distinct m.title) AS cnt_m
+WHERE size(cnt_m) >= 5
+RETURN p.name,cnt_m
+
+ 
+
+
